@@ -8,12 +8,7 @@
 
 [下载最新 Release（AK3 内核包与统一修复模块）](https://github.com/Leecaarmy/android_kernel_xiaomi_sm8350-hyperos/releases/latest)
 
-当前发布标签：`20261008-2155`；内核：`5.4.302-Dynamic-gf1e6db0`。
-
-- [下载 AK3 内核包](https://github.com/Leecaarmy/android_kernel_xiaomi_sm8350-hyperos/releases/download/20261008-2155/Dynamic-AK3-5.4.302-Dynamic-gf1e6db0-20261008-2155.zip)
-- [下载 KernelSU 系统服务修复模块（2.6.2-test）](https://github.com/Leecaarmy/android_kernel_xiaomi_sm8350-hyperos/releases/download/20261008-2155/KernelSU-atfwd_seccomp_fix-2.6.2-test-20261008-2155.zip)
-
-本版将 ReSukiSU/KernelSU 内核侧更新到 BakaSU 35218 / UAPI 5，包含管理器扫描与 SELinux 的上游修复及重复 service 保护，保留 SM8350 大小核修复和既有平台兼容。须配套 35218 / UAPI 5 的管理器及 `ksud`；仅安装 APK 不等于运行服务已更新。统一修复模块 2.6.2-test 沿用上版功能，在管理器中单独安装，用于处理无法在本仓库内核源码中修复的系统服务问题；新安装全部关闭，升级保留合法选择。适配范围、安装与回滚、实机结果、校验值及已知问题见 [本版 Release 说明](https://github.com/Leecaarmy/android_kernel_xiaomi_sm8350-hyperos/releases/tag/20261008-2155)。
+此固定入口用于打开最新正式版本的下载页面，提供 AK3 内核包、统一修复模块及相关附件。具体版本、更新内容、适配范围、安装与回滚方式、SHA-256 和验证边界，以该页面的 Release 说明为准。
 
 ## 项目用途
 
