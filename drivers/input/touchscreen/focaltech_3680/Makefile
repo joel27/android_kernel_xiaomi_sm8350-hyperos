@@ -23,10 +23,4 @@ else
     LLVM_NM = $(CLANG)/bin/llvm-nm
     LD = $(CLANG)/bin/ld.lld
 .PHONY: clean
-default:
-    $(MAKE) ARCH=arm64 CROSS_COMPILE=$(CROSS_COMPILE) REAL_CC=$(REAL_CC) CLANG_TRIPLE=aarch64-linux-gnu- AR=$(AR) LLVM_NM=$(LLVM_NM) LD=$(LD) -C $(KDIR) M=$(PWD) modules
-clean:
-    @rm -rf *.order *.symvers* .tmp_versions
-    @find -name "*.o*" -o -name "*.mod*" -o -name "*.ko*" | xargs rm -f
 endif
-
