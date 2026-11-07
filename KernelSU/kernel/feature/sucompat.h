@@ -30,7 +30,7 @@ int ksu_handle_post_execve(int *fd, const char *filename, void *argv, void *envp
 // WARNING! THERE HAVE TRYING TO CALL SYSCALL INTERNALLY
 // ENSURE CALL IT ONLY IN TRACEPOINT SYSCALL REDIRECT
 long ksu_handle_faccessat_sucompat_internal(int orig_nr, struct pt_regs *regs);
-long ksu_handle_stat_sucompa_internal(int orig_nr, struct pt_regs *regs);
+long ksu_handle_stat_sucompat_internal(int orig_nr, struct pt_regs *regs);
 long ksu_handle_execve_sucompat_internal(const char __user **filename_user, int orig_nr, struct pt_regs *regs);
 long ksu_handle_execveat_sucompat_internal(const char __user **filename_user, int orig_nr, struct pt_regs *regs);
 
@@ -43,7 +43,7 @@ long ksu_handle_execveat_sucompat_internal(const char __user **filename_user, in
 #elif defined(CONFIG_KSU_SUSFS) // susfs
 #include <linux/susfs_def.h>
 
-// Keep the post-exec flag aligned with the upstream manual-hook path.
+// sync with manual hook
 #define TIF_PROC_IN_KSU_EXECVE 61
 
 #define ksu_is_current_proc_unprivillege susfs_is_current_proc_no_su

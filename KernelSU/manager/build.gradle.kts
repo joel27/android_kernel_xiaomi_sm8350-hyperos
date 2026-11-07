@@ -1,5 +1,4 @@
 import com.diffplug.spotless.LineEnding
-import java.util.Properties
 
 plugins {
     alias(libs.plugins.agp.app) apply false
@@ -37,16 +36,6 @@ spotless {
     }
 }
 
-// 源码直接集成时使用上游版本元数据，不能取外层内核仓库的 Git 版本。
-val vendoredVersionFile = rootDir.resolve("../resukisu-version")
-val vendoredVersion = if (!rootDir.resolve("../.git").exists() && vendoredVersionFile.isFile) {
-    Properties().apply {
-        vendoredVersionFile.inputStream().use { load(it) }
-    }
-} else {
-    null
-}
-
 extra["androidMinSdkVersion"] = 26
 extra["androidTargetSdkVersion"] = 37
 extra["androidCompileSdkVersion"] = 37
@@ -64,17 +53,12 @@ extra["managerName"] = project.findProperty("KSU_NAME")?.toString() ?: extra["de
 
 val isSpoofedBuild = project.findProperty("IS_SPOOFED_BUILD")?.toString()?.toBoolean() ?: false
 
-fun getGitCommitCount(): Int {
-    if (vendoredVersion != null) {
-        return checkNotNull(vendoredVersion.getProperty("COUNT")).toInt()
-    }
-    return providers.exec {
-        commandLine("git", "rev-list", "--count", "HEAD")
-    }.standardOutput.asText.get().trim().toInt()
-}
+fun getGitCommitCount(): Int = providers.exec {
+    commandLine("git", "rev-list", "--count", "HEAD")
+}.standardOutput.asText.get().trim().toInt()
 
 fun getGitDescribe(): String {
-    val desc = vendoredVersion?.getProperty("TAG") ?: providers.exec {
+    val desc = providers.exec {
         commandLine("git", "describe", "--tags", "--always", "--abbrev=0")
     }.standardOutput.asText.get().trim()
     if (isSpoofedBuild) {

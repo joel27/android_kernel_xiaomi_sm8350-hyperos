@@ -11,28 +11,6 @@ const BOOTSTRAP_OBJECT: &str = "lkm_image_bootstrap.o";
 const PREPARED_BOOTSTRAP_OBJECT: &str = ".lkm_image_bootstrap.o";
 
 fn get_git_version() -> Result<(u32, String), std::io::Error> {
-    // 源码直接集成时与内核共用版本元数据，保留独立上游仓库的 Git 构建方式。
-    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-    let version_file = root.join("resukisu-version");
-    if !root.join(".git").exists() && version_file.is_file() {
-        println!("cargo:rerun-if-changed={}", version_file.display());
-        let metadata = fs::read_to_string(&version_file)?;
-        let field = |name: &str| -> io::Result<&str> {
-            metadata
-                .lines()
-                .find_map(|line| {
-                    let (key, value) = line.split_once('=')?;
-                    (key == name).then_some(value.trim())
-                })
-                .ok_or_else(|| io::Error::other(format!("版本元数据缺少 {name}")))
-        };
-        let count: u32 = field("COUNT")?
-            .parse()
-            .map_err(|_| io::Error::other("版本元数据 COUNT 无效"))?;
-        let name = field("DESCRIBE")?.trim_start_matches('v').to_string();
-        return Ok((30000 + 700 + count, name));
-    }
-
     let output = Command::new("git")
         .args(["rev-list", "--count", "HEAD"])
         .output()?;
