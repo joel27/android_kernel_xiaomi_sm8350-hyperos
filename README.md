@@ -72,7 +72,7 @@ The modules mentioned above are the parts of the source code directly related to
 
 `KernelSU/` is currently synchronized with the official BakaSU repository `main`, commit `373303c525d05c8b47801305f506ef9124dbd6e6`, version number `35218`, reference tag `v4.2.0-rc3`, UAPI `5`. This is development source code; the source and version metadata are recorded in `KernelSU/resukisu-version`.
 
-This repository retains the source code for direct integration, the SELinux 5.4 state locks, and the original multi-manager signature functionality, as well as `KSU_SUKISU` module identifier compatibility. The device defconfig, SUSFS 2.3.0, ReKernel-X, the unified fix module, and the AK3 template keep their existing configurations. The update records and verification limits are detailed in the BakaSU 35218 sync records.
+This repository retains the source code for direct integration, the SELinux 5.4 state locks, and the original multi-manager signature functionality, as well as `KSU_SUKISU` module identifier compatibility. The device defconfig, SUSFS 2.4.0, ReKernel-X, the unified fix module, and the AK3 template keep their existing configurations. The update records and verification limits are detailed in the BakaSU 35218 sync records.
 
 This source code has completed basic temporary real-device verification on the star, including boot, manager access, UAPI 5 compatibility, loading of existing fix modules, and protection against duplicate services; the original operating environment was restored after the tests. The process, known issues, and untested areas can be found in the real-device test and rollback records.
 
