@@ -6917,6 +6917,19 @@ static void fts_suspend_work(struct work_struct *work)
 	lpm_disable_for_dev(false, EVENT_INPUT);
 #endif
 	xiaomi_touch_set_suspend_state(XIAOMI_TOUCH_SUSPEND);
+
+	/* The gesture/FOD SPI command sent above leaves the SPI controller
+	 * runtime-active for its 250 ms autosuspend delay. If the system
+	 * suspends inside that window, spi_geni_suspend() returns -EBUSY and
+	 * aborts the whole suspend. Force an idle check here, while there is
+	 * still time margin. */
+	if (info->client && info->client->controller &&
+	    info->client->controller->dev.parent) {
+		struct device *spi_ctrl_dev = info->client->controller->dev.parent;
+
+		pm_runtime_get_sync(spi_ctrl_dev);
+		pm_runtime_put_sync(spi_ctrl_dev);
+	}
 }
 
 /**@}*/
@@ -8193,7 +8206,11 @@ static int fts_pm_suspend(struct device *dev)
 		enable_irq_wake(info->client->irq);
 	}
 #else
-	enable_irq_wake(info->client->irq);
+	if (info->gesture_enabled || fts_need_enter_lp_mode()) {
+		logError(1, "%s enable touch irq wake\n", tag);
+		enable_irq_wake(info->client->irq);
+		info->irq_wake = true;
+	}
 #endif
 	info->tp_pm_suspend = true;
 	reinit_completion(&info->pm_resume_completion);
@@ -8212,7 +8229,11 @@ static int fts_pm_resume(struct device *dev)
 		disable_irq_wake(info->client->irq);
 	}
 #else
-	disable_irq_wake(info->client->irq);
+	if (info->irq_wake) {
+		logError(1, "%s disable touch irq wake\n", tag);
+		disable_irq_wake(info->client->irq);
+		info->irq_wake = false;
+	}
 #endif
 	info->tp_pm_suspend = false;
 	complete(&info->pm_resume_completion);
