@@ -56,6 +56,7 @@
 #include <linux/notifier.h>
 #include <linux/backlight.h>
 #include <drm/mi_disp_notifier.h>
+#include <linux/pm_runtime.h>
 
 #include <linux/fb.h>
 #include <linux/proc_fs.h>
